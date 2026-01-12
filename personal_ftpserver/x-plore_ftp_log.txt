@@ -1,0 +1,41 @@
+< 220--- Welcome to Simply FTP server ---
+    --   By Renzo Mischianti   --
+220 --   Version 3.0.2 (2025-11-28)   --
+> FEAT
+< 211-Extensions supported:
+ MLST type*;modify*;size*;
+ MLSD
+ MDTM
+ MFMT
+ UTF8
+ SIZE
+ SITE FREE
+211 End.
+> USER *******
+< 331 Ok. Password required
+> PASS *******
+< 230 Ok
+> FEAT
+< 211-Extensions supported:
+ MLST type*;modify*;size*;
+ MLSD
+ MDTM
+ MFMT
+ UTF8
+ SIZE
+ SITE FREE
+211 End.
+> OPTS UTF8 ON
+< 200 OK, UTF8 ON
+> TYPE I
+< 200 TYPE is now 8-bit binary
+> CWD /log
+< 250 Directory changed to /log
+> PORT 192,168,1,110,143,247
+< 200 PORT command successful
+> MLSD
+< 150 Accepted data connection to port 36855
+< -rw-rw-r--	1	ftpserver	5963	Jan 01 00:00	20260107.log
+< -rw-rw-r--	1	ftpserver	93	Jan 01 00:00	noconnection.log
+< 226-options: -a -l
+226 2 matches total
