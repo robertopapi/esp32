@@ -11,7 +11,10 @@ Quindi ho provveduto a collegare un nuovo connettore micro USB al circuito dal q
 
 in questo modo è possibile alimentare il circuito e contemporaneamente continuare ad utilizzare la porta seriale/USB per il debug.
 
-Il risultato è quanto riportato in fotografia ( ![foto](https://github.com/robertopapi/esp32/blob/fe256bb7d5674f73af984f136b12edac67633f3c/separated_power_supply_and_serial_connection/Immagine%202026-01-13%20190016.png) )
+Il risultato è quanto riportato in fotografia
+![foto](https://github.com/robertopapi/esp32/blob/fe256bb7d5674f73af984f136b12edac67633f3c/separated_power_supply_and_serial_connection/Immagine%202026-01-13%20190016.png)
+
+Come si nota, ho frapposto tra i due connettori tre jumper, corrispondenti a +5V, +D e -D, mentre a massa è collegata direttamente, giusto per utilizzare tale circuito anche ad eventuali usi alternativi (si noti che sono collegati solo i due jumper più in basso mentre il primo in alto, corrispondente appunto ai +5V, è scollegato).
 
 
 
