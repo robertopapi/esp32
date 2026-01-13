@@ -77,7 +77,7 @@ uint8_t cardType = CARD_NONE;
 //////////////////////////////////
 FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP8266FtpServer.h to see ftp verbose on serial
 
-void _callback(FtpOperation ftpOperation, unsigned int freeSpace, unsigned int totalSpace)
+void _callback(FtpOperation ftpOperation, uint32_t freeSpace, uint32_t totalSpace)
 {
   /* FTP_CONNECT,
    * FTP_DISCONNECT,
@@ -121,7 +121,7 @@ void _callback(FtpOperation ftpOperation, unsigned int freeSpace, unsigned int t
  }
 }
 
-void _transferCallback(FtpTransferOperation ftpOperation, const char* name, unsigned int transferredSize)
+void _transferCallback(FtpTransferOperation ftpOperation, const char* name, uint32_t transferredSize)
 {
  String m="";
  char ctransferredSize[100];
