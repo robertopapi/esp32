@@ -7,14 +7,14 @@ Consultando la documentazione ufficiale di espressif ( [rif](https://docs.espres
 
 ![separated_power_supply_and_serial_connection/power_supply.png](https://github.com/robertopapi/esp32/blob/aff6d53e1dd5cae917c822b71488a9577f9bc633/separated_power_supply_and_serial_connection/power_supply.png)
 
-Quindi ho provveduto a collegare un nuovo connettore micro USB al circuito dal quale prelevare la sola alimentazione a +5V. A questo punto, per continuare ad utilizzare la porta seriale/USB senza bruciare ne controllore ne PC, ho realizzato un piccolo circuito tramite il quale collegare la porta microUSB del ESP32 con il PC senza tuttavia collegare il pin relativo ai +5V, quindi la sola massa con i pin +D e -D.
+Quindi ho provveduto a collegare un nuovo connettore micro USB al circuito dal quale prelevare la sola alimentazione a +5V e ovviamente la massa. A questo punto, per continuare ad utilizzare la porta seriale/USB senza bruciare ne controllore ne PC, ho realizzato un piccolo circuito tramite il quale collegare la porta microUSB del ESP32 con il PC senza tuttavia collegare il pin relativo ai +5V, quindi solo massa e i pin +D e -D.
 
-in questo modo è possibile alimentare il circuito e contemporaneamente continuare ad utilizzare la porta seriale/USB per il debug.
+in questo modo è possibile alimentare il circuito separatamente e contemporaneamente continuare ad utilizzare la porta seriale/USB per il debug.
 
 Il risultato è quanto riportato in fotografia
 ![foto](https://github.com/robertopapi/esp32/blob/fe256bb7d5674f73af984f136b12edac67633f3c/separated_power_supply_and_serial_connection/Immagine%202026-01-13%20190016.png)
 
-Come si nota, ho frapposto tra i due connettori tre jumper, corrispondenti a +5V, +D e -D, mentre a massa è collegata direttamente, giusto per utilizzare tale circuito anche ad eventuali usi alternativi (si noti che sono collegati solo i due jumper più in basso mentre il primo in alto, corrispondente appunto ai +5V, è scollegato).
+Come si nota, ho frapposto tra i due connettori tre jumper, corrispondenti a +5V, +D e -D, mentre la massa è collegata direttamente, giusto per utilizzare tale circuito anche per eventuali usi alternativi (si noti che sono collegati solo i due jumper più in basso mentre il primo in alto, corrispondente appunto ai +5V, è scollegato).
 
 
 
