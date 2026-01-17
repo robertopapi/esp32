@@ -750,10 +750,18 @@ private:
               STORAGE_MANAGER.usedBytes()); // return bytes (previously shifted >>1)
   };
 #endif
-#elif STORAGE_TYPE == STORAGE_SD || STORAGE_TYPE == STORAGE_SD_MMC
+/////////////////////////////////////////////////////////
+// RP inizio
+/////////////////////////////////////////////////////////
+//#elif STORAGE_TYPE == STORAGE_SD || STORAGE_TYPE == STORAGE_SD_MMC
+#elif STORAGE_TYPE == STORAGE_SD_MMC
   uint32_t capacity() { return true; };
   uint32_t free() { return true; };
-#elif STORAGE_TYPE == STORAGE_SEEED_SD
+//#elif STORAGE_TYPE == STORAGE_SEEED_SD
+#elif STORAGE_TYPE == STORAGE_SD || STORAGE_TYPE == STORAGE_SEEED_SD
+/////////////////////////////////////////////////////////
+// RP fine
+/////////////////////////////////////////////////////////
   uint32_t capacity() {
       return STORAGE_MANAGER.totalBytes(); // return bytes (previously shifted >>1)
   };
