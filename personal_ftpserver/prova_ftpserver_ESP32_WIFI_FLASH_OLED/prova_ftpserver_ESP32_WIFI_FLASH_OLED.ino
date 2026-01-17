@@ -38,9 +38,6 @@
 
 WebServer server(80);
 
-//istanza per memorizzare i dati nella flash
-Preferences pref;
-
 ///////////////////////////////////////////////////////////////////////
 // inizializzazione I2C e display
 ///////////////////////////////////////////////////////////////////////
@@ -236,8 +233,10 @@ void setup()
    }
 
    uint64_t cardSize = SD.cardSize() / (1024 * 1024);
+   uint64_t totalBytes = SD.totalBytes() / (1024 * 1024);
+   uint64_t usedBytes = SD.usedBytes() / (1024 * 1024);
 
-   SD_size = "Size:" + (String) cardSize + "MB";
+   SD_size = "CS,TB,UB MB:" + String(cardSize) + "," + String(totalBytes) + "," + String(usedBytes);
   }
  }
 ///////////////////////////////////////////////////////////
@@ -245,16 +244,56 @@ void setup()
 ///////////////////////////////////////////////////////////
  pref.begin("ftpserver", false);
 
- //get values from preferences
+ // variabili per l'accesso WiFi
  if (pref.isKey("ssid"))
   ssid = pref.getString("ssid");
  if (pref.isKey("pkey"))
   pkey = pref.getString("pkey");
- 
+
+// variabili per l'accesso al server FTP 
  if (pref.isKey("userftp"))
-  userftp = pref.getString("userftp");
+  userftp = pref.getString("userftp", USERFTP);
  if (pref.isKey("passwordftp"))
-  passwordftp = pref.getString("passwordftp");
+  passwordftp = pref.getString("passwordftp", PASSWORDFTP);
+ 
+//  STANDBYINTERVAL
+ if (pref.isKey("standbyInterval"))
+  standbyInterval = pref.getUInt("standbyInterval", STANDBYINTERVAL);
+ 
+ if (standbyInterval==0)
+ { 
+  standbyInterval=STANDBYINTERVAL;
+  pref.putUInt("standbyInterval",STANDBYINTERVAL);
+ }
+ 
+//  LEDFLASH
+ if (pref.isKey("ledFlash"))
+  ledFlash = pref.getUShort("ledFlash", LEDFLASH); //uint16_t
+
+ if (ledFlash==0)
+ { 
+  ledFlash=LEDFLASH;
+  pref.putUShort("ledFlash",LEDFLASH);
+ }
+
+// durata dei tempi per i bottoni
+ if (pref.isKey("longInterval"))
+  longInterval = pref.getUShort("longInterval", LONGINTERVAL); //uint16_t
+
+ if (longInterval==0)
+ { 
+  longInterval=LONGINTERVAL;
+  pref.putUShort("longInterval",LONGINTERVAL);
+ }
+
+ if (pref.isKey("glitchInterval"))
+  glitchInterval = pref.getUChar("glitchInterval", GLITCHINTERVAL); //uint8_t
+
+ if (glitchInterval==0)
+ { 
+  glitchInterval=GLITCHINTERVAL;
+  pref.putUChar("glitchInterval",GLITCHINTERVAL);
+ }
 
 //////////////////////////////////////////
 // preferences.h

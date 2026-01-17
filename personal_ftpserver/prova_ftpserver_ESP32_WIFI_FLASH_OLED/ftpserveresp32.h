@@ -9,8 +9,30 @@ String ntp = "it.pool.ntp.org";   //NTP server url
 struct tm ti;                     //time structure with current time
 
 // variabili di appoggio per l'accesso al server ftp con impostati i default
-String userftp = "ftpserver"; //user server ftp 
-String passwordftp = "ftpserver"; //password server ftp 
+#define USERFTP "ftpserver"
+#define PASSWORDFTP "ftpserver"
+String userftp = USERFTP; //user server ftp 
+String passwordftp = PASSWORDFTP; //password server ftp 
+
+// tempo necessario per far scattare lo standby del display
+#define STANDBYINTERVAL 120000 // intervallo di default che definisce lo standby necessario per disattivare il display in assenza di interazioni con i bottoni
+uint32_t standbyInterval = STANDBYINTERVAL;
+
+// durata della semionda di accensione del LED che corrisponde alla frequenza di flash
+#define LEDFLASH 500
+uint16_t ledFlash = LEDFLASH;
+
+// durata dei tempi per i bottoni
+#define LONGINTERVAL 1000 // intervallo che definisce il long click
+#define GLITCHINTERVAL 100 // intervallo che definisce la durata minima del click per eliminare i glitch
+uint16_t longInterval = LONGINTERVAL;
+uint8_t glitchInterval = GLITCHINTERVAL;
+
+//istanza per memorizzare i dati nella flash
+Preferences pref;
+
+// Inizializzazione LED UPLOAD DATA
+#define LED_FTPOPERATION_PIN   2
 
 bool ftpserveractive = false; // ftp server status
 
@@ -61,8 +83,6 @@ const char* PROGMEM months[] = {"Gennaio","Febbraio","Marzo","Aprile","Maggio","
 bool displaystandby = false; // indica che il timer è scaduto e il display è spento
 unsigned long displaystandby_time; // conserva l'istante iniziale in cui il display è acceso
 
-#define STANDBYINTERVAL 120000 // intervallo che definisce lo standby necessario per disattivare il display in assenza di interazioni con i bottoni
-
 /////////////////////////////////////////////////
 // inizializzazione display menu
 /////////////////////////////////////////////////
@@ -103,11 +123,5 @@ String pathCurrentLog = "noconnection.log";
 // attivazione del LOG
 //////////////////////////////////////////////////////////////////////////
 // #define LOGDEBUG
-
-//////////////////////////////////////////////////////////////////////////
-// Inizializzazione LED UPLOAD DATA
-//////////////////////////////////////////////////////////////////////////
-#define LED_FTPOPERATION_PIN   2
-#define LED_FTPOPERATION_FLASH 500
 
 #endif

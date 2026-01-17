@@ -173,7 +173,10 @@ function findchild(obj)
  for (const child of obj.children)
  {
   if (child.tagName=="INPUT" || child.tagName=="SELECT")
-   outputJSON+='{"attrname":"'+child.id+'","attrvalue":"'+child.value+'"},';
+  { 
+   outputJSON+='{"attrname":"'+child.id+'","attrvalue":';
+   outputJSON+='"'+child.value+'"},';
+  }
   else if (child.hasChildNodes())
    findchild(child);
  }

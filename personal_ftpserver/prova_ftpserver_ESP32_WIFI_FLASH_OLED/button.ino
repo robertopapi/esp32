@@ -7,9 +7,6 @@
 // definizione dei timer
 ///////////////////////////////////////////
 
-#define LONGINTERVAL 1000 // intervallo che definisce il long click
-#define GLITCHINTERVAL 100 // intervallo che definisce la durata minima del click per eliminare i glitch
-
 // creo la struttura con i parametri e necessari a ciascun bottone
 struct Button
 {
@@ -212,7 +209,7 @@ void action_b_select()
 }
 
 ///////////////////////////////////
-// LED UPLOAD DATA
+// LED FTP OPERATION
 ///////////////////////////////////
 unsigned long ledFTPoperation_time=0;
 
@@ -232,7 +229,7 @@ void ledFTPoperation() // accende o spegne all'opposto dello stato della porta
   }
  }
  
- if ((now_time - ledFTPoperation_time) >= LED_FTPOPERATION_FLASH)
+ if ((now_time - ledFTPoperation_time) >= ledFlash)
   ledFTPoperation_time = 0;
 }
 void ledFTPoperationON() // forza l'accenzione del LED
@@ -243,6 +240,6 @@ void ledFTPoperationON() // forza l'accenzione del LED
 void ledFTPoperationOFF() // forza lo spegnimento del LED
 {
  digitalWrite(LED_FTPOPERATION_PIN,HIGH);
- ledFTPoperation_time=0;
+ ledFTPoperation_time = 0;
 // Serial.println("LED OFF");
 }

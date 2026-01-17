@@ -49,7 +49,9 @@ void handleRoot()
 //{"grp":[{"grpname":"primo gruppo","attr":[{"attrname":"primo attributo","attrtype":"text","attrvalue":"primo valore"},{"attrname":"secondo attributo","attrtype":"password","attrvalue":"secondo valore"},{"attrname":"terzo attributo","attrtype":"number","attrvalue":123},{"attrname":"quarto attributo","attrtype":"select","attrvalue":["opzione uno","opzione uno","opzione due","opzione tre"]}]},{"grpname":"secondo gruppo","attr":[{"attrname":"quinto attributo","attrtype":"text","attrvalue":"quinto valore"},{"attrname":"sesto attributo","attrtype":"password","attrvalue":"sesto valore"}]}]}
 // nella select la prima option per default assumo che sia il valore memorizzato nella flash. opzione che non può essere scelta, che può essere una stringa nulla e che eventualmente si ripete di seguito 
 
-  page += "preloadedJSON=\'{\"grp\":[{\"grpname\":\"WiFi configuration\",\"attr\":[";
+  page += "preloadedJSON=\'{\"grp\":[";
+  
+  page += "{\"grpname\":\"WiFi configuration\",\"attr\":[";
   
   page += "{\"attrname\":\"ssid\",";
   int numSsid = WiFi.scanNetworks();
@@ -62,10 +64,11 @@ void handleRoot()
   {      
    page +=  "\"attrtype\":\"select\",";
    page +=  "\"attrvalue\":[\"";
-   if (pref.isKey("ssid")) // se esiste carica come primo il valore memorizzato altrimenti lo mette vuoto dato che la pagina html mostra di default il primo valore come quello memorizzato 
-   {
-    page += pref.getString("ssid");
-   }
+//   if (pref.isKey("ssid")) // se esiste carica come primo il valore memorizzato altrimenti lo mette vuoto dato che la pagina html mostra di default il primo valore come quello memorizzato 
+//   {
+//    page += pref.getString("ssid");
+//   }
+   page += ssid;
    page += "\",";
        
    for (int thisNet = 0; thisNet < numSsid; thisNet++)
@@ -81,27 +84,70 @@ void handleRoot()
   page += "{\"attrname\":\"pkey\",";
   page +=  "\"attrtype\":\"password\",";
   page +=  "\"attrvalue\":\"";
-  if (pref.isKey("pkey"))
-   page += pref.getString("pkey");
-  page +=  "\"}]},";
+//  if (pref.isKey("pkey"))
+//   page += pref.getString("pkey");
+  page += pkey;
+  page +=  "\"}";
+  
+  page += "]},"; // chiude il gruppo
   
   page += "{\"grpname\":\"FTP server configuration\",\"attr\":[";
 
   page += "{\"attrname\":\"userftp\",";
   page +=  "\"attrtype\":\"text\",";
   page +=  "\"attrvalue\":\"";
-  if (pref.isKey("userftp"))
-   page += pref.getString("userftp");
+//  if (pref.isKey("userftp"))
+//   page += pref.getString("userftp");
+  page += userftp;
   page +=  "\"},";
   
   page += "{\"attrname\":\"passwordftp\",";
   page +=  "\"attrtype\":\"password\",";
   page +=  "\"attrvalue\":\"";
-  if (pref.isKey("passwordftp"))
-   page += pref.getString("passwordftp");
+//  if (pref.isKey("passwordftp"))
+//   page += pref.getString("passwordftp");
+  page += passwordftp;
   page +=  "\"}";
+  
+  page += "]},"; // chiude il gruppo
+  
+  page += "{\"grpname\":\"Stand By Interval\",\"attr\":[";
 
-  page +=  "]}]}\';\n";
+  page += "{\"attrname\":\"standbyInterval\",";
+  page +=  "\"attrtype\":\"number\",";
+  page +=  "\"attrvalue\":";
+  page += String(standbyInterval);
+  page +=  "}";
+  
+  page += "]},"; // chiude il gruppo
+  
+  page += "{\"grpname\":\"LED Flash\",\"attr\":[";
+
+  page += "{\"attrname\":\"ledFlash\",";
+  page +=  "\"attrtype\":\"number\",";
+  page +=  "\"attrvalue\":";
+  page += String(ledFlash);
+  page +=  "}";
+
+  page += "]},"; // chiude il gruppo
+  
+  page += "{\"grpname\":\"Button timeout\",\"attr\":[";
+
+  page += "{\"attrname\":\"longInterval\",";
+  page +=  "\"attrtype\":\"number\",";
+  page +=  "\"attrvalue\":";
+  page += longInterval;
+  page +=  "},";
+  
+  page += "{\"attrname\":\"glitchInterval\",";
+  page +=  "\"attrtype\":\"number\",";
+  page +=  "\"attrvalue\":";
+  page += glitchInterval;
+  page +=  "}";
+  
+  page += "]}"; // chiude il gruppo --> manca la virgola perché è l'ultimo gruppo
+  
+  page += "]}\';\n";
   
   page += "urldatasave=\"/cmd/setaccess\";";
   page += "urlreset=\"/cmd/restart\";";
@@ -163,6 +209,7 @@ void setAccessData()
  String data = server.arg("plain");
  const char* attrname;
  const char* attrvalue;
+ String sattrvalue;
 
  StaticJsonDocument<1024> jBuffer;
  auto error = deserializeJson(jBuffer, data);
@@ -185,7 +232,6 @@ void setAccessData()
    attrvalue=attr_item["attrvalue"];
 
 // ssid e password di accesso al wifi
-   
    if (String(attrname)=="ssid")
    {    
     ssid=String(attrvalue);
@@ -198,7 +244,6 @@ void setAccessData()
    }
 
 // user e password di accesso al server ftp
-
    if (String(attrname)=="userftp")
    {
     userftp=String(attrvalue);
@@ -208,6 +253,48 @@ void setAccessData()
    {
     passwordftp=String(attrvalue);
     pref.putString("passwordftp",passwordftp);
+   }
+   
+// Stand By Interval
+   if (String(attrname)=="standbyInterval")
+   {
+    sattrvalue = String(attrvalue);
+    standbyInterval=(uint32_t) sattrvalue.toInt();
+    
+    if (standbyInterval==0)
+     standbyInterval=STANDBYINTERVAL;
+    pref.putUInt("standbyInterval",standbyInterval);
+   }
+   
+// LED Flash
+   if (String(attrname)=="ledFlash")
+   {
+    sattrvalue = String(attrvalue);
+    ledFlash=(uint16_t) sattrvalue.toInt();
+
+    if (ledFlash==0)
+     ledFlash=LEDFLASH;
+    pref.putUShort("ledFlash",ledFlash);
+   }
+   
+// Button timeout
+   if (String(attrname)=="longInterval")
+   {
+    sattrvalue = String(attrvalue);
+    longInterval=(uint16_t) sattrvalue.toInt();
+
+    if (longInterval==0)
+     longInterval=LONGINTERVAL;
+    pref.putUShort("longInterval",longInterval);
+   }
+   if (String(attrname)=="glitchInterval")
+   {
+    sattrvalue = String(attrvalue);
+    glitchInterval=(uint8_t) sattrvalue.toInt();
+
+    if (glitchInterval==0)
+     glitchInterval=GLITCHINTERVAL;
+    pref.putUChar("glitchInterval",glitchInterval);
    }
   }
   //respond with OK

@@ -100,7 +100,7 @@ void check_standby()
 
  if ( !(displaystandby) ) // display acceso
  {
-  if (now_time - displaystandby_time > STANDBYINTERVAL)
+  if (now_time - displaystandby_time > standbyInterval)
   {
    displaystandby=true;
    displaystandby_time=0;
