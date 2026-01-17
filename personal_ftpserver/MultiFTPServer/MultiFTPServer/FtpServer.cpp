@@ -13,6 +13,13 @@
 /////////////////////////////////////////////////////////
 // RP inizio
 /////////////////////////////////////////////////////////
+// in osservanza dei vecchi RFC 775 e RFC 1123, che prevedevano che alcuni comandi come
+// XPWD, XMKD e XRMD
+// fossero considerati sinonimi rispettivamente di
+// PWD, MKD e RMD
+// Tale circostanza era dovuta principalmente a problemi di compatibilità con i vecchi firewall che esigevano che tutti i comandi FTP
+// avessero una lunghezza di esattamente quattro caratteri.
+/////////////////////////////////////////////////////////
 // *   CDUP, CWD, PWD, QUIT, NOOP
  *   CDUP, CWD, PWD, XPWD, QUIT, NOOP
  *   MODE, PASV, PORT, STRU, TYPE
@@ -787,6 +794,9 @@ bool FtpServer::processCommand()
 //           ( CommandIs( "CWD" ) && ParameterIs( "." ))) {
   else if( ( CommandIs( "PWD" ) || CommandIs( "XPWD" ) ) ||
            ( CommandIs( "CWD" ) && ParameterIs( "." ))) {
+/////////////////////////////////////////////////////////
+// RP fine
+/////////////////////////////////////////////////////////
 	  client.print( F("257 \"")); client.print( cwdName ); client.print( F("\"") ); client.println( F(" is your current directory") );
   //
   //  CDUP - Change to Parent Directory 
@@ -1291,9 +1301,6 @@ bool FtpServer::processCommand()
 /////////////////////////////////////////////////////////
 // RP inizio
 ///////////////////////////////////////////////////////// 
-// in osservanza dei vecchi RFC 775 e poi RFC 1123, che ha reso XMKD un sinonimo di MKD richiesto per compatibilità.
-//La sua esistenza era dovuta principalmente a problemi di compatibilità con vecchi firewall che richiedevano che tutti i comandi FTP avessero una lunghezza di esattamente quattro caratteri.
-/////////////////////////////////////////////////////////
 
 //  //
 //  //  MKD - Make Directory
@@ -1332,9 +1339,6 @@ bool FtpServer::processCommand()
 /////////////////////////////////////////////////////////
 // RP inizio
 ///////////////////////////////////////////////////////// 
-// in osservanza dei vecchi RFC 775 e poi RFC 1123, che ha reso XRMD un sinonimo di RMD richiesto per compatibilità.
-//La sua esistenza era dovuta principalmente a problemi di compatibilità con vecchi firewall che richiedevano che tutti i comandi FTP avessero una lunghezza di esattamente quattro caratteri.
-/////////////////////////////////////////////////////////
 //  //
 //  //  RMD - Remove a Directory 
 //  //
