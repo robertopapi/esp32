@@ -7,7 +7,7 @@ Consultando la documentazione ufficiale di espressif ( [rif](https://docs.espres
 
 ![separated_power_supply_and_serial_connection/power_supply.png](https://github.com/robertopapi/esp32/blob/aff6d53e1dd5cae917c822b71488a9577f9bc633/separated_power_supply_and_serial_connection/power_supply.png)
 
-Quindi ho provveduto a collegare un nuovo connettore micro USB al circuito dal quale prelevare la sola alimentazione a +5V e ovviamente la massa. A questo punto, per continuare ad utilizzare la porta seriale/USB senza bruciare ne controllore ne PC, ho realizzato un piccolo circuito tramite il quale collegare la porta microUSB del ESP32 con il PC senza tuttavia collegare il pin relativo ai +5V, conservando quindi solo massa e i pin +D e -D.
+Quindi ho provveduto a collegare un nuovo connettore micro USB al circuito, dal quale prelevare la sola alimentazione a +5V e ovviamente la massa. A questo punto, per continuare ad utilizzare la porta seriale/USB senza bruciare ne controllore ne PC, ho realizzato un piccolo circuito tramite il quale collegare la porta microUSB del ESP32 con il PC senza tuttavia collegare il pin relativo ai +5V, conservando quindi solo massa e i pin +D e -D.
 
 in questo modo è possibile alimentare il circuito separatamente e contemporaneamente continuare ad utilizzare la porta seriale/USB per il debug.
 
