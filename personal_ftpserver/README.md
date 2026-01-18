@@ -10,6 +10,7 @@ Sfruttando qualche risorsa hardware che giaceva non usata nel cassetto, ho proge
 * permettere di eseguire piccole operazioni di manutenzione/configurazione attraverso tale display e pochi bottoni
 * poter accedere a tale server anche attraverso una semplice interfaccia web per eseguireoperazioni di configurazione e di controllo dello stato più sofisticate e sopratutto utilizzando una via alternativa al protocollo FTP.
 ## configurazione hardware
+![schema elettrico](https://github.com/robertopapi/esp32/blob/587e630d40c67c2ef1f819fcd351a06fc47dd77d/personal_ftpserver/schema1.png)
 ## software
 ## funzionamento
 ## conclusioni
