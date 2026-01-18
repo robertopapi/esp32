@@ -12,5 +12,7 @@ Sfruttando qualche risorsa hardware che giaceva non usata nel cassetto, ho proge
 ## configurazione hardware
 ![schema elettrico](https://github.com/robertopapi/esp32/blob/587e630d40c67c2ef1f819fcd351a06fc47dd77d/personal_ftpserver/schema1.png)
 ## software
+![Interfaccia WEB](https://github.com/robertopapi/esp32/blob/7b93e4ae0f42f2d6a9d236c72bfa833daffc2b7c/personal_ftpserver/interfaccia_web.png)
+
 ## funzionamento
 ## conclusioni
