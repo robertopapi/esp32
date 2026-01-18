@@ -1,7 +1,6 @@
-// configura display, SD e WIFI e memorizza i dati nella flash
-
-
+//////////////////////////////////
 // wifi e OTA
+//////////////////////////////////
 #include <WiFi.h> 
 #include <ArduinoOTA.h>
 
@@ -70,9 +69,9 @@ SPIClass SPI2(HSPI); // definisco la classe che utilizzerò per eseguire il begi
 uint8_t cardType = CARD_NONE;
 
 //////////////////////////////////
-// ftpserver
+// ftpserver, callback e transfercallback
 //////////////////////////////////
-FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP8266FtpServer.h to see ftp verbose on serial
+FtpServer ftpSrv;
 
 void _callback(FtpOperation ftpOperation, uint32_t freeSpace, uint32_t totalSpace)
 {
@@ -88,8 +87,6 @@ void _callback(FtpOperation ftpOperation, uint32_t freeSpace, uint32_t totalSpac
  
  sprintf(cfreeSpace, "%u", freeSpace);
  sprintf(ctotalSpace, "%u", totalSpace);
-
-// dispdebug("_callback");
 
  switch (ftpOperation)
  {
@@ -236,7 +233,7 @@ void setup()
    uint64_t totalBytes = SD.totalBytes() / (1024 * 1024);
    uint64_t usedBytes = SD.usedBytes() / (1024 * 1024);
 
-   SD_size = "CS,TB,UB MB:" + String(cardSize) + "," + String(totalBytes) + "," + String(usedBytes);
+   SD_size = "CS,Tot,Used:" + String(cardSize) + "," + String(totalBytes) + "," + String(usedBytes);
   }
  }
 ///////////////////////////////////////////////////////////

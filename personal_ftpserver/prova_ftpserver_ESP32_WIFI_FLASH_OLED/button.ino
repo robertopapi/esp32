@@ -3,10 +3,6 @@
 //////////////////////////////////
 #include "ftpserveresp32.h"
 
-///////////////////////////////////////////
-// definizione dei timer
-///////////////////////////////////////////
-
 // creo la struttura con i parametri e necessari a ciascun bottone
 struct Button
 {
@@ -232,7 +228,7 @@ void ledFTPoperation() // accende o spegne all'opposto dello stato della porta
  if ((now_time - ledFTPoperation_time) >= ledFlash)
   ledFTPoperation_time = 0;
 }
-void ledFTPoperationON() // forza l'accenzione del LED
+void ledFTPoperationON() // forza l'accensione del LED
 {
  digitalWrite(LED_FTPOPERATION_PIN,LOW);
 // Serial.println("LED ON");

@@ -93,7 +93,6 @@ void dispmsg(String sx, String sy, String s)
  u8g2.drawUTF8(x, y, buf); // permette la stampa di caratteri accentati
 }
 
-
 void check_standby()
 {
  volatile unsigned long now_time = millis();

@@ -84,8 +84,6 @@ void handleRoot()
   page += "{\"attrname\":\"pkey\",";
   page +=  "\"attrtype\":\"password\",";
   page +=  "\"attrvalue\":\"";
-//  if (pref.isKey("pkey"))
-//   page += pref.getString("pkey");
   page += pkey;
   page +=  "\"}";
   
@@ -96,16 +94,12 @@ void handleRoot()
   page += "{\"attrname\":\"userftp\",";
   page +=  "\"attrtype\":\"text\",";
   page +=  "\"attrvalue\":\"";
-//  if (pref.isKey("userftp"))
-//   page += pref.getString("userftp");
   page += userftp;
   page +=  "\"},";
   
   page += "{\"attrname\":\"passwordftp\",";
   page +=  "\"attrtype\":\"password\",";
   page +=  "\"attrvalue\":\"";
-//  if (pref.isKey("passwordftp"))
-//   page += pref.getString("passwordftp");
   page += passwordftp;
   page +=  "\"}";
   
@@ -158,9 +152,6 @@ void handleRoot()
   page += FPSTR(HTML_tail);
   
   server.send(200,"text/html",page);
-
-//  dispdebug("client loaded root page");
-//  dispmsg("center", "center", "client load root page");
  }
  else
  {
@@ -195,11 +186,6 @@ void handleRoot()
    ESP.restart();
   }
   server.send(200,"text/html",CONFIG_page); //send the config page to the client
-
-//  dispdebug("client loaded config page");
-//  clear_display();
-//  dispmsg("center", "center","client load conf page");
-//  u8g2.sendBuffer(); // invio i messaggi sul display
  }
 }
 
@@ -214,15 +200,10 @@ void setAccessData()
  StaticJsonDocument<1024> jBuffer;
  auto error = deserializeJson(jBuffer, data);
 
-// clear_display();
-
  if (error)
  {
   //respond with NOT OK
   server.send(200,"text/plain","NOT OK");
-
-//  dispdebug("client setAccessData fail");
-//  dispmsg("center", "center","client setAccData fail");
  }
  else
  {
@@ -299,12 +280,7 @@ void setAccessData()
   }
   //respond with OK
   server.send(200,"text/plain","OK");
-
-//  dispdebug("client setAccessData ok");
-//  dispmsg("center", "center","client setAccData ok");
  }
-
-// u8g2.sendBuffer(); // invio i messaggi sul display
 }
 
 //AJAX command /cmd/getaccess
@@ -319,12 +295,11 @@ void getAccessData()
 //AJAX command /cmd/restart
 void restart()
 {
-// dispdebug("restart!");
-
-// clear_display();
-// dispmsg("center", "center","restart!");
-// u8g2.sendBuffer(); // invio i messaggi sul display
- 
+ standby_reset(millis());
+ clear_display();
+ dispmsg("center", "center", "Restart!");
+ u8g2.sendBuffer(); // invio i messaggi sul display
+ delay(1000);
  ESP.restart();
 }
 
@@ -334,11 +309,6 @@ void handleShelly()
 
  //respond with OK
  server.send(200,"text/plain","OK");
-
-// dispdebug("client handle Shelly");
-// clear_display();
-// dispmsg("center", "center", "client handle Shelly");
-// u8g2.sendBuffer(); // invio i messaggi sul display
 }
 
 void handleNotFound()
@@ -358,11 +328,6 @@ void handleNotFound()
   message += " " + server.argName(i) + ": " + server.arg(i) + ", ";
  }
  server.send(404, "text/plain", message);
-
-// dispdebug("client handle not found " + message);
-// clear_display();
-// dispmsg("center", "center","client hand not found " + message);
-// u8g2.sendBuffer(); // invio i messaggi sul display
 }
 
 //////////////////////////////////////////////
