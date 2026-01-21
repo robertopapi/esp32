@@ -1802,62 +1802,6 @@ bool FtpServer::doStore()
   return false;
 }
 
-void generateFileLine(FTP_CLIENT_NETWORK_CLASS* data, bool isDirectory, const char* fn, long fz, const char* time, const char* user, bool writeFilename = true)
-{
-	if( isDirectory ) {
-		//			  data.print( F("+/,\t") );
-		//			  DEBUG_PRINT(F("+/,\t"));
-
-		data->print( F("drwxrwsr-x\t2\t"));
-		data->print( user );
-		data->print( F("\t") );
-		data->print( long( 4096 ) );
-		data->print( F("\t") );
-
-		DEBUG_PRINT( F("drwxrwsr-x\t2\t") );
-		DEBUG_PRINT( user );
-		DEBUG_PRINT( F("\t") );
-
-		DEBUG_PRINT( long( 4096 ) );
-		DEBUG_PRINT( F("\t") );
-
-		data->print(time);
-		DEBUG_PRINT(time);
-
-		data->print( F("\t") );
-		if (writeFilename) data->println( fn );
-
-		DEBUG_PRINT( F("\t") );
-		if (writeFilename) DEBUG_PRINTLN( fn );
-
-	} else {
-//			data.print( F("+r,s") );
-//			DEBUG_PRINT(F("+r,s"));
-
-		data->print( F("-rw-rw-r--\t1\t") );
-		data->print( user );
-		data->print( F("\t") );
-		data->print( fz );
-		data->print( F("\t") );
-
-		DEBUG_PRINT( F("-rw-rw-r--\t1\t") );
-		DEBUG_PRINT( user );
-		DEBUG_PRINT( F("\t") );
-		DEBUG_PRINT( fz );
-		DEBUG_PRINT( F("\t") );
-
-		data->print(time);
-		DEBUG_PRINT(time);
-
-		data->print( F("\t") );
-		if (writeFilename) data->println( fn );
-
-		DEBUG_PRINT( F("\t") );
-		if (writeFilename) DEBUG_PRINTLN( fn );
-	}
-
-}
-
 #if defined(ESP32) || defined(ESP8266) || defined(ARDUINO_ARCH_RP2040)
 //
 // Formats printable String from a time_t timestamp
@@ -1908,10 +1852,147 @@ String makeDateTimeStrList(time_t ft, bool dateContracted = false)
 }
 
 // https://files.stairways.com/other/ftp-list-specs-info.txt
-void generateFileLine(FTP_CLIENT_NETWORK_CLASS* data, bool isDirectory, const char* fn, long fz, time_t time, const char* user, bool writeFilename = true) {
-	generateFileLine(data, isDirectory, fn, fz, makeDateTimeStrList(time).c_str(), user, writeFilename);
-}
+/////////////////////////////////////////////////////////
+// RP inizio
+/////////////////////////////////////////////////////////   
+// sposto la creazione della stringa del tempo direttamente dentro generateFileLine()
+
+//void generateFileLine(FTP_CLIENT_NETWORK_CLASS* data, bool isDirectory, const char* fn, long fz, time_t time, const char* user, bool writeFilename = true) {
+//	generateFileLine(data, isDirectory, fn, fz, makeDateTimeStrList(time).c_str(), user, writeFilename);
+//}
+/////////////////////////////////////////////////////////
+// RP fine
+/////////////////////////////////////////////////////////   
 #endif
+
+/////////////////////////////////////////////////////////
+// RP inizio
+/////////////////////////////////////////////////////////  
+//void generateFileLine(FTP_CLIENT_NETWORK_CLASS* data, bool isDirectory, const char* fn, long fz, const char* time, const char* user, bool writeFilename = true)
+void generateFileLine(FTP_CLIENT_NETWORK_CLASS* data, bool isDirectory, const char* fn, long fz, time_t time, const char* user, bool writeFilename = true)
+{
+ String t;
+ 
+ DEBUG_PRINTLN("generateFileLine(isDirectory="+String(isDirectory)+",fn="+String(fn)+",fz="+String(fz)+",time="+makeDateTimeStrList(time)+",user="+String(user)+",writeFilename="+String(writeFilename)+")");
+/////////////////////////////////////////////////////////
+// RP fine
+///////////////////////////////////////////////////////// 
+	if( isDirectory )
+ {
+ 	//			  data.print( F("+/,\t") );
+		//			  DEBUG_PRINT(F("+/,\t"));
+		data->print( F("drwxrwsr-x\t2\t"));
+		data->print( user );
+		data->print( F("\t") );
+		data->print( long( 4096 ) );
+		data->print( F("\t") );
+
+		DEBUG_PRINT( F("drwxrwsr-x\t2\t") );
+		DEBUG_PRINT( user );
+		DEBUG_PRINT( F("\t") );
+ 
+		DEBUG_PRINT( long( 4096 ) );
+		DEBUG_PRINT( F("\t") );
+ 
+/////////////////////////////////////////////////////////
+// RP inizio
+/////////////////////////////////////////////////////////
+// 		data->print(time);
+// 		DEBUG_PRINT(time);
+
+  t =  makeDateTimeStrList(time);
+ 	data->print( F(t.c_str()) );
+ 	DEBUG_PRINT( F(t.c_str()) );
+/////////////////////////////////////////////////////////
+// RP fine
+/////////////////////////////////////////////////////////
+ 
+		data->print( F("\t") );
+		if (writeFilename) data->println( fn );
+ 
+		DEBUG_PRINT( F("\t") );
+		if (writeFilename) DEBUG_PRINTLN( fn );
+	}
+ else
+ {
+ 	data->print( F("-rw-rw-r--\t1\t") );
+ 	DEBUG_PRINT( F("-rw-rw-r--\t1\t") );
+ 	data->print( user );
+ 	DEBUG_PRINT( user );
+ 	data->print( F("\t") );
+ 	DEBUG_PRINT( F("\t") );
+ 	data->print( fz );
+ 	DEBUG_PRINT( fz );
+ 	data->print( F("\t") );
+ 	DEBUG_PRINT( F("\t") );
+/////////////////////////////////////////////////////////
+// RP inizio
+/////////////////////////////////////////////////////////
+// 		data->print(time);
+// 		DEBUG_PRINT(time);
+
+  t =  makeDateTimeStrList(time);
+		data->print( F(t.c_str()) );
+		DEBUG_PRINT( F(t.c_str()) );
+/////////////////////////////////////////////////////////
+// RP fine
+/////////////////////////////////////////////////////////
+  
+ 	data->print( F("\t") );
+ 	DEBUG_PRINT( F("\t") );
+   
+ 	if (writeFilename)
+  {
+   data->println( fn );
+   DEBUG_PRINTLN( fn );
+  }
+	}
+}
+
+/////////////////////////////////////////////////////////
+// RP inizio
+/////////////////////////////////////////////////////////  
+void generateFileLineMLSD(FTP_CLIENT_NETWORK_CLASS* data, bool isDirectory, const char* fn, long fz, time_t time, const char* user, bool writeFilename = true)
+{
+ String t;
+ 
+ DEBUG_PRINTLN("generateFileLineMLSD(isDirectory="+String(isDirectory)+",fn="+String(fn)+",fz="+String(fz)+",time="+makeDateTimeStrList(time)+",user="+String(user)+",writeFilename="+String(writeFilename)+")");
+	if( isDirectory )
+ {
+  data->print( F("Type=dir;Modify=") );
+  DEBUG_PRINT( F("Type=dir;Modify=") );
+
+  t =  makeDateTimeStrList(time,true);
+  data->print( F(t.c_str()) );
+  DEBUG_PRINT( F(t.c_str()) );
+
+  data->print( F(";Perm=elm; ") );
+  DEBUG_PRINT( F(";Perm=elm; ") );
+  data->println( fn );
+  DEBUG_PRINTLN( fn );
+	}
+ else
+ {
+  data->print( F("Type=file;Size=") );
+  DEBUG_PRINT( F("Type=file;Size=") );
+  data->print( fz );
+  DEBUG_PRINT( fz );
+  data->print( F(";Modify=") );
+  DEBUG_PRINT( F(";Modify=") );
+
+  t =  makeDateTimeStrList(time,true);
+  data->print( F(t.c_str()) );
+  DEBUG_PRINT( F(t.c_str()) );
+
+  data->print( F(";Perm=r; ") );
+  DEBUG_PRINT( F(";Perm=r; ") );
+  data->println( fn );
+  DEBUG_PRINTLN( fn );
+	}
+}
+/////////////////////////////////////////////////////////
+// RP fine
+/////////////////////////////////////////////////////////  
 
 bool FtpServer::doList()
 {
@@ -1969,9 +2050,6 @@ bool FtpServer::doList()
 	  	if (transferStage == FTP_Nlst) {
 	  		data.println(fn);
 	  	} else {
-
-  DEBUG_PRINTLN("before generateFileLine(2)");
-     
 	  		generateFileLine(&data, false, fn, fz, time, FtpServer::user);
 	  	}
 
@@ -2031,8 +2109,8 @@ bool FtpServer::doList()
 	  		time_t time = dir.fileTime();
 	  		generateFileLine(&data, dir.isDirectory(), fn, fz, time, FtpServer::user);
 #elif defined(ESP32)
-	  		time_t time = fileDir.getLastWrite();
-			generateFileLine(&data, fileDir.isDirectory(), fn, fz, time, FtpServer::user);
+     time_t time = fileDir.getLastWrite();
+     generateFileLine(&data, fileDir.isDirectory(), fn, fz, time, FtpServer::user);
 #else
 	  		generateFileLine(&data, fileDir.isDirectory(), fn, fz, "Jan 01 00:00", FtpServer::user);
 #endif
@@ -2055,17 +2133,18 @@ bool FtpServer::doList()
 	  	if (transferStage == FTP_Nlst) {
 	  		data.println(fn.c_str());
 	  	} else {
-#if STORAGE_TYPE == STORAGE_SD_MMC
+/////////////////////////////////////////////////////////
+// RP inizio
+/////////////////////////////////////////////////////////
+//#if STORAGE_TYPE == STORAGE_SD_MMC
+#if STORAGE_TYPE == STORAGE_SD
 	  		time_t time = fileDir.getLastWrite();
-     
-DEBUG_PRINTLN("before generateFileLine(6)");
-     
-	  		generateFileLine(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), time, FtpServer::user);
+/////////////////////////////////////////////////////////
+// RP fine
+/////////////////////////////////////////////////////////
+     generateFileLine(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), time, FtpServer::user);
 #else
-     
-DEBUG_PRINTLN("before generateFileLine(7)");
-     
-	  		generateFileLine(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), "Jan 01 00:00", FtpServer::user);
+     generateFileLine(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), "Jan 01 00:00", FtpServer::user);
 #endif
 	  	}
 		nbMatch ++;
@@ -2121,52 +2200,51 @@ DEBUG_PRINTLN("before generateFileLine(7)");
 
 bool FtpServer::doMlsd()
 {
-  if( ! dataConnected())
-  {
+ if( ! dataConnected())
+ {
 #if STORAGE_TYPE != STORAGE_SPIFFS && STORAGE_TYPE != STORAGE_LITTLEFS && STORAGE_TYPE != STORAGE_SEEED_SD
   dir.close();
 #endif
-  	DEBUG_PRINTLN(F("Not connected!!"));
-    return false;
-  }
-  DEBUG_PRINTLN(F("Connected!!"));
+ 	DEBUG_PRINTLN(F("Not connected!!"));
+  return false;
+ }
+ DEBUG_PRINTLN(F("Connected!!"));
 
 #if STORAGE_TYPE == STORAGE_SPIFFS
-	  DEBUG_PRINTLN(F("DIR MLSD "));
-	#if defined(ESP8266)
-	  if( dir.next())
-	#else
-	  File fileDir = dir.openNextFile();
-	  if( fileDir )
-	#endif
-	  {
-		  DEBUG_PRINTLN(F("DIR NEXT "));
+	DEBUG_PRINTLN(F("DIR MLSD "));
+#if defined(ESP8266)
+ if( dir.next())
+#else
+ File fileDir = dir.openNextFile();
+	if( fileDir )
+#endif
+	{
+	 DEBUG_PRINTLN(F("DIR NEXT "));
 		char dtStr[ 15 ];
 
 		struct tm * timeinfo;
 
-		#if defined(ESP8266)
-			time_t time = dir.fileTime();
-		#else
-			time_t time = fileDir.getLastWrite();
-		#endif
+#if defined(ESP8266)
+	 time_t time = dir.fileTime();
+#else
+		time_t time = fileDir.getLastWrite();
+#endif
 
-			timeinfo = localtime ( &time );
+		timeinfo = localtime ( &time );
 
-			// 2000 01 01 16 06 56
+		// 2000 01 01 16 06 56
 
-			strftime (dtStr,15,"%Y%m%d%H%M%S",timeinfo);
+		strftime (dtStr,15,"%Y%m%d%H%M%S",timeinfo);
 
-
-	#if defined(ESP8266)
+#if defined(ESP8266)
 		String fn = dir.fileName();
 		fn.remove(0, fn.lastIndexOf("/")+1);
 		long fz = dir.fileSize();
-	#else
+#else
 		String fn = fileDir.name();
 		fn.remove(0, fn.lastIndexOf("/")+1);
 		long fz = fileDir.size();
-	#endif
+#endif
 
 		data.print( F("Type=") );
 
@@ -2184,43 +2262,45 @@ bool FtpServer::doMlsd()
 
 		nbMatch ++;
 		return true;
-	  }
+	}
 #elif STORAGE_TYPE == STORAGE_LITTLEFS || STORAGE_TYPE == STORAGE_SEEED_SD || STORAGE_TYPE == STORAGE_FFAT
-	  DEBUG_PRINTLN(F("DIR MLSD "));
-	#if defined(ESP8266) || defined(ARDUINO_ARCH_RP2040)
-	  if( dir.next())
-	#else
-#if STORAGE_TYPE == STORAGE_SEEED_SD
-	  File fileDir = STORAGE_MANAGER.open(dir.name());
-	  fileDir = dir.openNextFile();
+	DEBUG_PRINTLN(F("DIR MLSD "));
+#if defined(ESP8266) || defined(ARDUINO_ARCH_RP2040)
+	if( dir.next())
 #else
-	  File fileDir = dir.openNextFile();
+#if STORAGE_TYPE == STORAGE_SEEED_SD
+ File fileDir = STORAGE_MANAGER.open(dir.name());
+ fileDir = dir.openNextFile();
+#else
+ File fileDir = dir.openNextFile();
 #endif
-	  if( fileDir )
+ if( fileDir )
 #endif
-	  {
-
-	#if defined(ESP8266) || defined(ARDUINO_ARCH_RP2040)
-		  long fz = long( dir.fileSize());
+ {
+#if defined(ESP8266) || defined(ARDUINO_ARCH_RP2040)
+  long fz = long( dir.fileSize());
 //		  const char* fn = dir.fileName().c_str();
-		  String aza = dir.fileName();
-		  const char* fn = aza.c_str(); //Serial.printf("test %s ", fn);
+  String aza = dir.fileName();
+  const char* fn = aza.c_str(); //Serial.printf("test %s ", fn);
 
 //		data.print( long( dir.fileSize()) );
 //		data.print( F(",\t") );
 //		data.println( dir.fileName() );
-	#elif STORAGE_TYPE == STORAGE_SEEED_SD
-		  const char* fnC = fileDir.name();
-		  const char* fn;
-		  if ( fnC[0] == '/' ) {
-			  fn = &fnC[1];
-		  }else{
-			  fn = fnC;
-		  }
+#elif STORAGE_TYPE == STORAGE_SEEED_SD
+  const char* fnC = fileDir.name();
+  const char* fn;
+  if ( fnC[0] == '/' )
+  {
+	  fn = &fnC[1];
+  }
+  else
+  {
+		 fn = fnC;
+		}
 		long fz = fileDir.size();
-	#else
-		  long fz = long( fileDir.size());
-		  const char* fn = fileDir.name();
+#else
+  long fz = long( fileDir.size());
+  const char* fn = fileDir.name();
 
 //		data.print( long( fileDir.size()) );
 //		data.print( F("\t") );
@@ -2229,23 +2309,32 @@ bool FtpServer::doMlsd()
 //		DEBUG_PRINT( long( fileDir.size()));
 //		DEBUG_PRINT( F("\t") );
 //		DEBUG_PRINTLN( fileDir.name() );
-	#endif
-	#if defined(ESP8266) || defined(ARDUINO_ARCH_RP2040)
+#endif
+#if defined(ESP8266) || defined(ARDUINO_ARCH_RP2040)
 		time_t time = dir.fileTime();
-		generateFileLine(&data, dir.isDirectory(), fn, fz, time, FtpServer::user);
-	#elif defined(ESP32)
+/////////////////////////////////////////////////////////
+// RP inizio
+/////////////////////////////////////////////////////////
+//		generateFileLine(&data, dir.isDirectory(), fn, fz, time, FtpServer::user);
+		generateFileLineMLSD(&data, dir.isDirectory(), fn, fz, time, FtpServer::user);
+#elif defined(ESP32)
 		time_t time = fileDir.getLastWrite();
-		generateFileLine(&data, fileDir.isDirectory(), fn, fz, time, FtpServer::user);
-	#else
-		generateFileLine(&data, fileDir.isDirectory(), fn, fz, "Jan 01 00:00", FtpServer::user);
-	#endif
-    nbMatch ++;
-    return true;
-  }
+//		generateFileLine(&data, fileDir.isDirectory(), fn, fz, time, FtpServer::user);
+		generateFileLineMLSD(&data, fileDir.isDirectory(), fn, fz, time, FtpServer::user);
+#else
+//		generateFileLine(&data, fileDir.isDirectory(), fn, fz, "Jan 01 00:00", FtpServer::user);
+		generateFileLineMLSD(&data, fileDir.isDirectory(), fn, fz, "Jan 01 00:00", FtpServer::user);
+/////////////////////////////////////////////////////////
+// RP fine
+/////////////////////////////////////////////////////////
+#endif
+  nbMatch ++;
+  return true;
+ }
 #elif STORAGE_TYPE == STORAGE_SD || STORAGE_TYPE == STORAGE_SD_MMC
-	  FTP_FILE fileDir = dir.openNextFile();
-	  if( fileDir )
-	  {
+ FTP_FILE fileDir = dir.openNextFile();
+ if( fileDir )
+ {
 
 //		data.print( F("+r,s") );
 //		data.print( long( fileDir.size()) );
@@ -2259,22 +2348,24 @@ bool FtpServer::doMlsd()
 /////////////////////////////////////////////////////////
 //#if STORAGE_TYPE == STORAGE_SD_MMC
 #if STORAGE_TYPE == STORAGE_SD
+		time_t time = fileDir.getLastWrite();
+//		generateFileLine(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), time, FtpServer::user);
+		generateFileLineMLSD(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), time, FtpServer::user);
+#else
+//		generateFileLine(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), "Jan 01 00:00", FtpServer::user);
+		generateFileLineMLSD(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), "Jan 01 00:00", FtpServer::user);
+#endif
 /////////////////////////////////////////////////////////
 // RP fine
 /////////////////////////////////////////////////////////
-		time_t time = fileDir.getLastWrite();
-		generateFileLine(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), time, FtpServer::user);
-#else
-		generateFileLine(&data, fileDir.isDirectory(), fn.c_str(), long( fileDir.size()), "Jan 01 00:00", FtpServer::user);
-#endif
 
 		nbMatch ++;
 		return true;
-		}
+	}
 
 #elif STORAGE_TYPE == STORAGE_FATFS
-  if( dir.nextFile())
-  {
+ if( dir.nextFile())
+ {
 //    if( dir.isDir()) {
 //      data.print( F("+/,\t") );
 //    } else {
@@ -2282,43 +2373,49 @@ bool FtpServer::doMlsd()
 //    }
 //    data.println( dir.fileName() );
 
-		String fn = dir.fileName();
-		if (fn[0]=='/') { fn.remove(0, fn.lastIndexOf("/")+1); }
-
-  	if (transferStage == FTP_Nlst) {
-  		data.println(fn.c_str());
-  	} else {
-		generateFileLine(&data, dir.isDir(), fn.c_str(), long( dir.fileSize()), "Jan 01 00:00", FtpServer::user);
-  	}
-    nbMatch ++;
-    return true;
-  }
-#else
-  if( file.openNext( &dir, FTP_FILE_READ_ONLY ))
+  String fn = dir.fileName();
+	 if (fn[0]=='/')
   {
+   fn.remove(0, fn.lastIndexOf("/")+1);
+  }
+
+	 if (transferStage == FTP_Nlst)
+  {
+	 	data.println(fn.c_str());
+	 }
+  else
+  {
+	 	generateFileLine(&data, dir.isDir(), fn.c_str(), long( dir.fileSize()), "Jan 01 00:00", FtpServer::user);
+	 }
+  nbMatch ++;
+  return true;
+ }
+#else
+ if( file.openNext( &dir, FTP_FILE_READ_ONLY ))
+ {
 //    if( file.isDir()) {
 //      data.print( F("+/,\t") );
 //    } else {
 //    	data.print( F("+r,s") ); data.print( long( fileSize( file )) ); data.print( F(",\t") );
 //    }
-	generateFileLine(&data, file.isDir(), "", long( fileSize( file )), "Jan 01 00:00", FtpServer::user, false);
+	 generateFileLine(&data, file.isDir(), "", long( fileSize( file )), "Jan 01 00:00", FtpServer::user, false);
 
-    file.printName( & data );
-    data.println();
-    file.close();
-    nbMatch ++;
-    return true;
-		}
+  file.printName( & data );
+  data.println();
+  file.close();
+  nbMatch ++;
+  return true;
+	}
 #endif
-  data.stop();
-  client.println(F("226-options: -a -l") );
-  client.print( F("226 ") ); client.print( nbMatch ); client.println( F(" matches total") );
+ data.stop();
+ client.println(F("226-options: -a -l") );
+ client.print( F("226 ") ); client.print( nbMatch ); client.println( F(" matches total") );
 #if STORAGE_TYPE != STORAGE_SPIFFS && STORAGE_TYPE != STORAGE_LITTLEFS && STORAGE_TYPE != STORAGE_SEEED_SD && STORAGE_TYPE != STORAGE_SEEED_SD
-  dir.close();
+ dir.close();
 #endif
-  DEBUG_PRINTLN(F("All file read!!"));
-  return false;
-		}
+ DEBUG_PRINTLN(F("All file read!!"));
+ return false;
+}
 
 void FtpServer::closeTransfer()
 {
