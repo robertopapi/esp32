@@ -1951,7 +1951,10 @@ void generateFileLine(FTP_CLIENT_NETWORK_CLASS* data, bool isDirectory, const ch
 
 /////////////////////////////////////////////////////////
 // RP inizio
-/////////////////////////////////////////////////////////  
+/////////////////////////////////////////////////////////
+// Per compatibilità con le APP android è necessario rispettare la sintassi definita nel RFC 3659 specificamente per il comando MLSD
+// Viceversa per i comandi LIST, il cui risultato da standard è destinato direttamente all'utente e non ad essere interpretato da un software, si mantiene la sintassi UNIX-Like precedente
+///////////////////////////////////////////////////////// 
 void generateFileLineMLSD(FTP_CLIENT_NETWORK_CLASS* data, bool isDirectory, const char* fn, long fz, time_t time, const char* user, bool writeFilename = true)
 {
  String t;
